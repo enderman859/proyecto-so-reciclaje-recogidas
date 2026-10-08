@@ -1,4 +1,4 @@
-package juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.domain;
+package juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

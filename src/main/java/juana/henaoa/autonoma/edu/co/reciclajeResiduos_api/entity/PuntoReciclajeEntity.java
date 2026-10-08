@@ -1,4 +1,4 @@
-package juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.domain;
+package juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
