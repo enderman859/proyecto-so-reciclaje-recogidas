@@ -16,6 +16,10 @@ Java, Spring Boot, Maven, PostgreSQL, JPA e Hibernate, Git y GitHub.
 
 El archivo editable (draw.io) está en [documentos/modelo-entidad-relacion.drawio](documentos/modelo-entidad-relacion.drawio).
 
+## Endpoints y DTOs
+
+El mapeo de los endpoints con sus DTO de request y response está en [documentos/mapeo-endpoints.md](documentos/mapeo-endpoints.md).
+
 ## Ejecución
 
 1. Crear la base de datos en PostgreSQL:
