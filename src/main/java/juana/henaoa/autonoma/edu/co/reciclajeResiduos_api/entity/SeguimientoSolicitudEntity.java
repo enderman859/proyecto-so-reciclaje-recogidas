@@ -13,9 +13,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "seguimientos_solicitud")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SeguimientoSolicitudEntity {
 
     @Id
@@ -35,48 +40,8 @@ public class SeguimientoSolicitudEntity {
     private EstadoSolicitud estadoNuevo;
 
     @Column(name = "fecha_cambio", nullable = false)
-    private LocalDateTime fechaCambio = LocalDateTime.now();
+    private LocalDateTime fechaCambio;
 
     @Column(length = 255)
     private String observacion;
-
-    public Long getId() {
-        return id;
-    }
-
-    public SolicitudRecogidaEntity getSolicitud() {
-        return solicitud;
-    }
-
-    public void setSolicitud(SolicitudRecogidaEntity solicitud) {
-        this.solicitud = solicitud;
-    }
-
-    public EstadoSolicitud getEstadoAnterior() {
-        return estadoAnterior;
-    }
-
-    public void setEstadoAnterior(EstadoSolicitud estadoAnterior) {
-        this.estadoAnterior = estadoAnterior;
-    }
-
-    public EstadoSolicitud getEstadoNuevo() {
-        return estadoNuevo;
-    }
-
-    public void setEstadoNuevo(EstadoSolicitud estadoNuevo) {
-        this.estadoNuevo = estadoNuevo;
-    }
-
-    public LocalDateTime getFechaCambio() {
-        return fechaCambio;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
 }
