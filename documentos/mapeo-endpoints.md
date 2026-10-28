@@ -125,3 +125,7 @@ Estados posibles (RN-05): `SOLICITADA`, `PROGRAMADA`, `RECOLECTADA` y `CANCELADA
 9. **PUT `/api/campanas/{id}`**: reemplaza la campaña antes de que inicie. 404 si no existe; 400 si ya inició.
 10. **PATCH `/api/solicitudes/{id}/estado`**: programa, recolecta o cancela una solicitud (gestor). 404 si no existe; 400 si el cambio de estado no es válido.
 11. **DELETE `/api/solicitudes/{id}`**: retira una solicitud aún no programada. 404 si no existe; 400 si ya fue programada.
+
+## Estado de implementación
+
+Endpoints ya implementados con su Service y Controller: **5** (GET de la lista, sin filtro por ahora), **6** (GET por ID, con 404) y **8** (POST). Los demás se implementan en los siguientes incrementos.
