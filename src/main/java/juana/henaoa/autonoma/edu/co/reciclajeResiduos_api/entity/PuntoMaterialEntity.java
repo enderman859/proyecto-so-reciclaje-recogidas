@@ -8,9 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "puntos_materiales")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PuntoMaterialEntity {
 
     @Id
@@ -24,24 +29,4 @@ public class PuntoMaterialEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", nullable = false)
     private MaterialEntity material;
-
-    public Long getId() {
-        return id;
-    }
-
-    public PuntoReciclajeEntity getPunto() {
-        return punto;
-    }
-
-    public void setPunto(PuntoReciclajeEntity punto) {
-        this.punto = punto;
-    }
-
-    public MaterialEntity getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(MaterialEntity material) {
-        this.material = material;
-    }
 }

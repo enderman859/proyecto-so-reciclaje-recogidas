@@ -15,9 +15,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "solicitudes_recogida")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SolicitudRecogidaEntity {
 
     @Id
@@ -53,77 +58,20 @@ public class SolicitudRecogidaEntity {
     private EstadoSolicitud estado;
 
     @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
+    private LocalDateTime fechaCreacion;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCiudadanoNombre() {
-        return ciudadanoNombre;
-    }
-
-    public void setCiudadanoNombre(String ciudadanoNombre) {
+    // Toda solicitud nueva nace en estado SOLICITADA (RN-05): lo decide la entidad
+    public SolicitudRecogidaEntity(String ciudadanoNombre, String ciudadanoContacto,
+            PuntoReciclajeEntity punto, CampanaEntity campana, MaterialEntity material,
+            BigDecimal cantidadKg, LocalDate fechaRecogida) {
         this.ciudadanoNombre = ciudadanoNombre;
-    }
-
-    public String getCiudadanoContacto() {
-        return ciudadanoContacto;
-    }
-
-    public void setCiudadanoContacto(String ciudadanoContacto) {
         this.ciudadanoContacto = ciudadanoContacto;
-    }
-
-    public PuntoReciclajeEntity getPunto() {
-        return punto;
-    }
-
-    public void setPunto(PuntoReciclajeEntity punto) {
         this.punto = punto;
-    }
-
-    public CampanaEntity getCampana() {
-        return campana;
-    }
-
-    public void setCampana(CampanaEntity campana) {
         this.campana = campana;
-    }
-
-    public MaterialEntity getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(MaterialEntity material) {
         this.material = material;
-    }
-
-    public BigDecimal getCantidadKg() {
-        return cantidadKg;
-    }
-
-    public void setCantidadKg(BigDecimal cantidadKg) {
         this.cantidadKg = cantidadKg;
-    }
-
-    public LocalDate getFechaRecogida() {
-        return fechaRecogida;
-    }
-
-    public void setFechaRecogida(LocalDate fechaRecogida) {
         this.fechaRecogida = fechaRecogida;
-    }
-
-    public EstadoSolicitud getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoSolicitud estado) {
-        this.estado = estado;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+        this.estado = EstadoSolicitud.SOLICITADA;
+        this.fechaCreacion = LocalDateTime.now();
     }
 }
