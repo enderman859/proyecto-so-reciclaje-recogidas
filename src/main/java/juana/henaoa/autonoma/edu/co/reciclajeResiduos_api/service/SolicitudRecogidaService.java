@@ -7,17 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.dto.CambioEstadoRequest;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.dto.SolicitudRecogidaRequest;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.dto.SolicitudRecogidaResponse;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.CampanaEntity;
+import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.EstadoSolicitud;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.MaterialEntity;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.PuntoReciclajeEntity;
+import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.SeguimientoSolicitudEntity;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.entity.SolicitudRecogidaEntity;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.CampanaMaterialRepository;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.CampanaRepository;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.MaterialRepository;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.PuntoMaterialRepository;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.PuntoReciclajeRepository;
+import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.SeguimientoSolicitudRepository;
 import juana.henaoa.autonoma.edu.co.reciclajeResiduos_api.repository.SolicitudRecogidaRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -31,9 +35,13 @@ public class SolicitudRecogidaService {
     private final MaterialRepository materialRepository;
     private final PuntoMaterialRepository puntoMaterialRepository;
     private final CampanaMaterialRepository campanaMaterialRepository;
+    private final SeguimientoSolicitudRepository seguimientoRepository;
 
-    public List<SolicitudRecogidaResponse> listar() {
-        return solicitudRepository.findAll().stream()
+    public List<SolicitudRecogidaResponse> listar(EstadoSolicitud estado) {
+        List<SolicitudRecogidaEntity> solicitudes = (estado == null)
+                ? solicitudRepository.findAll()
+                : solicitudRepository.findByEstado(estado);
+        return solicitudes.stream()
                 .map(SolicitudRecogidaResponse::desde)
                 .toList();
     }
@@ -72,5 +80,32 @@ public class SolicitudRecogidaService {
                 request.ciudadanoNombre(), request.ciudadanoContacto(),
                 punto, campana, material, request.cantidadKg(), request.fechaRecogida());
         return SolicitudRecogidaResponse.desde(solicitudRepository.save(solicitud));
+    }
+
+    public SolicitudRecogidaResponse cambiarEstado(Long id, CambioEstadoRequest request) {
+        SolicitudRecogidaEntity solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "La solicitud no existe"));
+
+        EstadoSolicitud anterior = solicitud.getEstado();
+        if (!solicitud.cambiarEstado(request.estado())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cambio de estado no válido");
+        }
+        solicitudRepository.save(solicitud);
+
+        // Trazabilidad: cada cambio de estado queda registrado
+        seguimientoRepository.save(new SeguimientoSolicitudEntity(
+                solicitud, anterior, solicitud.getEstado(), request.observacion()));
+        return SolicitudRecogidaResponse.desde(solicitud);
+    }
+
+    public void retirar(Long id) {
+        SolicitudRecogidaEntity solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "La solicitud no existe"));
+
+        // Solo se retira una solicitud que aún no ha sido programada
+        if (solicitud.getEstado() != EstadoSolicitud.SOLICITADA) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La solicitud ya fue programada");
+        }
+        solicitudRepository.delete(solicitud);
     }
 }

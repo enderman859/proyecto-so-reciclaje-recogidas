@@ -44,4 +44,13 @@ public class SeguimientoSolicitudEntity {
 
     @Column(length = 255)
     private String observacion;
+
+    public SeguimientoSolicitudEntity(SolicitudRecogidaEntity solicitud, EstadoSolicitud estadoAnterior,
+            EstadoSolicitud estadoNuevo, String observacion) {
+        this.solicitud = solicitud;
+        this.estadoAnterior = estadoAnterior;
+        this.estadoNuevo = estadoNuevo;
+        this.observacion = observacion;
+        this.fechaCambio = LocalDateTime.now();
+    }
 }

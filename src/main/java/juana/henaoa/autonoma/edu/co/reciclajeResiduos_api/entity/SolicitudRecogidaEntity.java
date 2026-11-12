@@ -74,4 +74,16 @@ public class SolicitudRecogidaEntity {
         this.estado = EstadoSolicitud.SOLICITADA;
         this.fechaCreacion = LocalDateTime.now();
     }
+
+    // RN-05: SOLICITADA pasa a PROGRAMADA o CANCELADA; PROGRAMADA pasa a RECOLECTADA o CANCELADA
+    public boolean cambiarEstado(EstadoSolicitud nuevo) {
+        boolean valido = (estado == EstadoSolicitud.SOLICITADA
+                        && (nuevo == EstadoSolicitud.PROGRAMADA || nuevo == EstadoSolicitud.CANCELADA))
+                || (estado == EstadoSolicitud.PROGRAMADA
+                        && (nuevo == EstadoSolicitud.RECOLECTADA || nuevo == EstadoSolicitud.CANCELADA));
+        if (valido) {
+            this.estado = nuevo;
+        }
+        return valido;
+    }
 }

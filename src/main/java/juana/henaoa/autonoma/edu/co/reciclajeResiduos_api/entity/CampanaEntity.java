@@ -33,4 +33,15 @@ public class CampanaEntity {
 
     @Column(name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
+
+    public CampanaEntity(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
+        reemplazar(nombre, descripcion, fechaInicio, fechaFin);
+    }
+
+    public void reemplazar(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+    }
 }

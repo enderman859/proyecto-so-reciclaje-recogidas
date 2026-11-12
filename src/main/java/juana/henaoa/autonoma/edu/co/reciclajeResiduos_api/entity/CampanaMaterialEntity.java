@@ -29,4 +29,9 @@ public class CampanaMaterialEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", nullable = false)
     private MaterialEntity material;
+
+    public CampanaMaterialEntity(CampanaEntity campana, MaterialEntity material) {
+        this.campana = campana;
+        this.material = material;
+    }
 }

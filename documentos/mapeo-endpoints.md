@@ -128,4 +128,4 @@ Estados posibles (RN-05): `SOLICITADA`, `PROGRAMADA`, `RECOLECTADA` y `CANCELADA
 
 ## Estado de implementación
 
-Endpoints ya implementados con su Service y Controller: **5** (GET de la lista, sin filtro por ahora), **6** (GET por ID, con 404) y **8** (POST). Los demás se implementan en los siguientes incrementos.
+Los 11 endpoints están implementados con su Controller, Service y Repository, y fueron probados contra PostgreSQL.
